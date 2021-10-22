@@ -64,7 +64,14 @@ app.put("/todos/:id", checksExistsUserAccount, (request, response) => {
 });
 
 app.patch("/todos/:id/done", checksExistsUserAccount, (request, response) => {
-  // Complete aqui
+  const { user } = request;
+  const { id } = request.params;
+  const todoToUpdate = user["todos"].find((todo) => todo["id"] == id);
+  if (!todoToUpdate) {
+    return response.status(400).json({ error: "Todo's Id not found" });
+  }
+  todoToUpdate["done"] = true;
+  return response.send();
 });
 
 app.delete("/todos/:id", checksExistsUserAccount, (request, response) => {
